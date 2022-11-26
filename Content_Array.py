@@ -1,5 +1,5 @@
 def convertToBinary(value, size=16):
-    # Default argument 16 for whole register
+    
     if size == 16 or size == 8:
         binary = bin(value)
         str_bin = str(binary)
