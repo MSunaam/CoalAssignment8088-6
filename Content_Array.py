@@ -71,3 +71,27 @@ class Content_Array_16(Content_Array):
 
     def getHigh(self):
         pass
+
+    def SF(self, setFlag):
+        if setFlag:
+            self.content[15] = 1
+        else:
+            self.content[15] = 0
+
+    def OF(self, setFlag):
+        if setFlag:
+            self.content[14] = 1
+        else:
+            self.content[14] = 0
+
+    def ZF(self, setFlag):
+        if setFlag:
+            self.content[13] = 1
+        else:
+            self.content[13] = 0
+
+    def CF(self, setFlag):
+        if setFlag:
+            self.content[12] = 1
+        else:
+            self.content[12] = 0

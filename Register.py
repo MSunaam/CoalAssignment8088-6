@@ -4,88 +4,56 @@ from Content_Array import Content_Array_16
 
 class Register:
     def __init__(self, name, enableLowHigh):
-        self.registerLowHigh = enableLowHigh
-        # For future reference to check if register allows accessing low and high or not
         self.name = name
+        self.enableLowHigh = enableLowHigh
+        # Enable low high will determine if the register allows 8-bit access
         if enableLowHigh:
+            # 8-bit access allowed
             self.content = Content_Array()
-            # Allows access to individual 8-bits
-            self.higherSubReg = subRegister(name[0] + 'H', self.content.getHigh())
-            self.lowerSubReg = subRegister(name[0] + 'L', self.content.getLow())
         else:
             self.content = Content_Array_16()
-            # Does not allow access to individual 8-bits
-
-    def getLow(self):
-        # Get the content of the lower Part
-        if self.registerLowHigh:
-            # 8-bit accessible register
-            return self.lowerSubReg.getData()
-        else:
-            print("This Register does not support access of Lower 8-bits")
-
-    def getHigh(self):
-        # Get the content of the higher Part
-        if self.registerLowHigh:
-            # 8-bit accessible register
-            return self.higherSubReg.getData()
-        else:
-            print("This Register does not support access of higher 8-bits")
-
-    def setLow(self, values):
-        # Set the content of the lower Part
-        if self.registerLowHigh:
-            # 8-bit accessible register
-            # update the content array as well
-            self.content.inputL(values)
-            # This approach used because content array will automatically convert to binary and store in lower 8-bits
-            # Also validation will be done
-            self.lowerSubReg.setData(self.content.getLow())
-        else:
-            print("This Register does not support access of lower 8-bits")
-
-    def setHigh(self, values):
-        # Set the content of the higher Part
-        if self.registerLowHigh:
-            # 8-bit accessible register
-            # update the content array as well
-            self.content.inputH(values)
-            # This approach used because content array will automatically convert to binary and store in higher 8-bits
-            # Also validation will be done
-            self.higherSubReg.setData(self.content.getHigh())
-        else:
-            print("This Register does not support access of higher 8-bits")
-
-    def setData(self, values):
-        # Set the data of the whole register
-        self.content.input(values)
-        # Now change the values of subRegisters if exist
-        if self.registerLowHigh:
-            # SubRegisters Exist
-            self.higherSubReg.setData(self.content.getHigh())
-            self.lowerSubReg.setData(self.content.getLow())
-
-    def getData(self):
-        return self.content.getData()
 
     def printContent(self):
-        self.content.print()
+        print(self.content.getData())
 
-
-class subRegister:
-
-    # This class is for storing lower and higher parts of Registers
-    def __init__(self, name, values=None):
-        # Initialize the subRegister
-        if values is None:
-            values = []
-        self.array = values
-        self.name = name
+    def input(self, values):
+        # Input 16-bits
+        self.content.input(values)
 
     def getData(self):
-        # Get the data from sub-Register
-        return self.array
+        # Return contents
+        return self.content.getData()
 
-    def setData(self, values):
-        # Set the values
-        self.array = values
+    def inputHigh(self, values):
+        # For setting High
+        self.content.inputH(values)
+
+    def getHigh(self):
+        # For getting Higher 8-bits
+        return self.content.getHigh()
+
+    def inputLow(self, value):
+        # For input low 8-bits
+        self.content.inputL(value)
+
+    def getLow(self):
+        # For getting low 8-bits
+        self.content.getLow()
+
+
+class FlagsReg:
+    def __init__(self):
+        self.content = Content_Array_16()
+        # Only lower 4-bits are used for the flags CF,OF,ZF and SF
+
+    def SF(self, setFlag):
+        self.content.SF(setFlag)
+
+    def OF(self, setFlag):
+        self.content.OF(setFlag)
+
+    def ZF(self, setFlag):
+        self.content.ZF(setFlag)
+
+    def CF(self, setFlag):
+        self.content.CF(setFlag)

@@ -1,3 +1,6 @@
+from re import findall
+
+
 def convertToBinary(value, size=16):
     # Default argument 16 for whole register
     if size == 16 or size == 8:
@@ -10,3 +13,8 @@ def convertToBinary(value, size=16):
             str_bin = "0" * (size - len(str_bin)) + str_bin
             # filling the string with 0s
             return [int(x) for x in str_bin]
+
+
+def stringToList(string):
+    listW = findall(r'\w+', string)
+    return listW
