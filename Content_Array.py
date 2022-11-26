@@ -1,5 +1,5 @@
 def convertToBinary(value, size=16):
-    # Default argument 16 for whole register
+    
     if size == 16 or size == 8:
         binary = bin(value)
         str_bin = str(binary)
@@ -48,6 +48,14 @@ class Content_Array:
         for x in range(8, 16):
             self.content[x] = tempH[abs(x - 8)]
 
+    def getLow(self):
+        # Get the lower part of the array
+        return [self.content[x] for x in range(8, 16)]
+
+    def getHigh(self):
+        # Get the higher part of the array
+        return [self.content[x] for x in range(8)]
+
     def print(self):
         # Temp function to check Array (Testing)
         print(self.content)
@@ -63,4 +71,10 @@ class Content_Array_16(Content_Array):
         pass
 
     def swapHL(self):
+        pass
+
+    def getLow(self):
+        pass
+
+    def getHigh(self):
         pass
