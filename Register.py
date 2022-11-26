@@ -31,3 +31,4 @@ class Register:
             return self.high
         else:
             print("Register Error: Register does not allow accessing Low and High")
+
