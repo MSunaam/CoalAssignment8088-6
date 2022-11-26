@@ -37,10 +37,6 @@ class Content_Array:
         for x in range(8, 16):
             self.content[x] = tempH[abs(x - 8)]
 
-    def getData(self):
-        return self.content
-        # Return the data stored
-
     def getLow(self):
         # Get the lower part of the array
         return [self.content[x] for x in range(8, 16)]
@@ -48,6 +44,10 @@ class Content_Array:
     def getHigh(self):
         # Get the higher part of the array
         return [self.content[x] for x in range(8)]
+
+    def getData(self):
+        # Get the whole array
+        return self.content
 
     def print(self):
         # Temp function to check Array (Testing)
