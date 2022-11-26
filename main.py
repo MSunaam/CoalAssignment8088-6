@@ -1,1 +1,2 @@
-from Content_Array import *
+from Register import
+
