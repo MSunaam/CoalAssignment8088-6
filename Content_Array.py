@@ -1,7 +1,22 @@
 def convertToBinary(value, size=16):
     # Default argument 16 for whole register
     if size == 16 or size == 8:
-        binaryy(0)
+        binary = bin(value)
+        str_bin = str(binary)
+        str_bin = str_bin[2:]
+        if len(str_bin) > size:
+            print(f"Size Mismatch: Register can hold {size}-bits only")
+        else:
+            str_bin = "0" * (size - len(str_bin)) + str_bin
+            # filling the string with 0s
+            return [int(x) for x in str_bin]
+
+
+class Content_Array:
+    # Note Lower is 8 to 15 and Higher is 0 to 7
+    # This array will store 8-bits array
+    def __init__(self):
+        self.content = convertToBinary(0)
         # Initialize the array with 0s
 
     def input(self, value):
