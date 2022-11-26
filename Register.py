@@ -19,6 +19,7 @@ class Register:
             # Does not allow access to individual 8-bits
 
     def getLow(self):
+        # Get Low Contents
         if self.registerLowHigh:
             self.low = self.content.getLow()
             return self.low
@@ -26,9 +27,31 @@ class Register:
             print("Register Error: Register does not allow accessing Low and High")
 
     def getHigh(self):
+        # Get High Contents
         if self.registerLowHigh:
             self.high = self.content.getHigh()
             return self.high
         else:
             print("Register Error: Register does not allow accessing Low and High")
 
+    def getData(self):
+        # Get Register Contents
+        return self.content.getData()
+
+    def input(self, value):
+        # Update Register Contents
+        self.content.input(value)
+
+    def inputLow(self, value):
+        # Update Low Contents
+        if self.registerLowHigh:
+            self.content.inputL(value)
+        else:
+            print("Register Error: Register does not allow accessing Low and High")
+
+    def inputHigh(self, value):
+        # Update High Contents
+        if self.registerLowHigh:
+            self.content.inputH(value)
+        else:
+            print("Register Error: Register does not allow accessing Low and High")
