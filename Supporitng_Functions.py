@@ -1,5 +1,6 @@
 import re
 from Register_Instances import *
+from commands import *
 
 
 def stringToList(string):
@@ -43,6 +44,11 @@ def checkMemory(memory):
 
 
 def checkOperands(string):
+    mode = -1
+    # If mode is 0 REG REG
+    # IF node is 1 REG Mem
+    # if Mode is 2 Mem Reg
+    # if mode is 3 REG Immediate
     listWords = stringToList(string)
 
     if len(listWords) < 3:
@@ -66,6 +72,8 @@ def checkOperands(string):
         if not checkRegisters(listWords[1:]):
             print("Operand Error: Incorrect Registers")
             return
+        mode = 0
+        return mode
     elif value:
         # Immediate data passed
         pass
