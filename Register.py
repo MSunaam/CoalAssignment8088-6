@@ -1,6 +1,5 @@
 from Content_Array import Content_Array
 from Content_Array import Content_Array_16
-from Content_Array import convertToBinary
 
 
 class Register:
