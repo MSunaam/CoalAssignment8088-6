@@ -6,6 +6,7 @@ def convertToBinary(value, size=16):
         str_bin = str_bin[2:]
         if len(str_bin) > size:
             print(f"Size Mismatch: Register can hold {size}-bits only")
+            return False
         else:
             str_bin = "0" * (size - len(str_bin)) + str_bin
             # filling the string with 0s
@@ -21,16 +22,25 @@ class Content_Array:
 
     def input(self, value):
         # 16-bits input into X
+        if not convertToBinary(value):
+            return
+        # If size mismatch occurs, return and value not changes
         self.content = convertToBinary(value)
 
     def inputH(self, value):
         # 8-bits input into Higher(H)
+        if not convertToBinary(value, 8):
+            return
+        # If size mismatch occurs, return and value not changes
         for x in range(8):
             self.content[x] = convertToBinary(value, 8)[x]
             # This will change only the first 8-bits
 
     def inputL(self, value):
         # 8-bits input into Lower(L)
+        if not convertToBinary(value, 8):
+            return
+        # If size mismatch occurs, return and value not changes
         for x in range(8, 16):
             self.content[abs(x)] = convertToBinary(value, 8)[abs(x - 8)]
             # Content array needs to be accessed from 8 to 15 but convertToBinary needs to accessed from 0 to 7

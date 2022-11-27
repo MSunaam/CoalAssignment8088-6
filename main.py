@@ -1,5 +1,7 @@
-from Supporitng_Functions import stringToList, checkOperands
+from commands import *
+from Register_Instances import *
 
-command = input("Please enter assembly command\n")
-command = command.lower()
-checkOperands(command)
+AX.input(64)
+AX.printContent()
+inc(AL)
+AX.printContent()
