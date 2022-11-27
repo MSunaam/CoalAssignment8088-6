@@ -1,4 +1,15 @@
-from Supporitng_Functions import convertToBinary
+def convertToBinary(value, size=16):
+    # Default argument 16 for whole register
+    if size == 16 or size == 8:
+        binary = bin(value)
+        str_bin = str(binary)
+        str_bin = str_bin[2:]
+        if len(str_bin) > size:
+            print(f"Size Mismatch: Register can hold {size}-bits only")
+        else:
+            str_bin = "0" * (size - len(str_bin)) + str_bin
+            # filling the string with 0s
+            return [int(x) for x in str_bin]
 
 
 class Content_Array:
@@ -45,6 +56,10 @@ class Content_Array:
         # Get the higher part of the array
         return [self.content[x] for x in range(8)]
 
+    def getData(self):
+        # Get the whole array
+        return self.content
+
     def print(self):
         # Temp function to check Array (Testing)
         print(self.content)
@@ -67,3 +82,27 @@ class Content_Array_16(Content_Array):
 
     def getHigh(self):
         pass
+
+    def SF(self, setFlag):
+        if setFlag:
+            self.content[15] = 1
+        else:
+            self.content[15] = 0
+
+    def OF(self, setFlag):
+        if setFlag:
+            self.content[14] = 1
+        else:
+            self.content[14] = 0
+
+    def ZF(self, setFlag):
+        if setFlag:
+            self.content[13] = 1
+        else:
+            self.content[13] = 0
+
+    def CF(self, setFlag):
+        if setFlag:
+            self.content[12] = 1
+        else:
+            self.content[12] = 0

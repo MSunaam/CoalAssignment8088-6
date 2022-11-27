@@ -1,5 +1,5 @@
-from Register import Register
+from Supporitng_Functions import stringToList, checkOperands
 
-AX = Register("AX", True)
-print(AX.getLow())
-print(AX.getHigh())
+command = input("Please enter assembly command\n")
+command = command.lower()
+checkOperands(command)
