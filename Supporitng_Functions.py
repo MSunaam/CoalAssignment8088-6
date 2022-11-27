@@ -1,3 +1,6 @@
+from Register_Instances import *
+
+
 def compliment(value):
     listBin = list(value)
     length = len(listBin)
@@ -14,3 +17,14 @@ def compliment(value):
                 listBin[char] = '1'
 
     return ''.join(map(str, listBin))
+
+
+def checkRegister(register):
+    if register in Reg.keys():
+        register = Reg[register]
+    elif register in SubReg.keys():
+        register = SubReg[register]
+    else:
+        print("Error: Register does not exist")
+        return False
+    return True, register

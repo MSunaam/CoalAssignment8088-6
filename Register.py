@@ -6,6 +6,7 @@ from Content_Array import convertToBinary
 class Register:
     def __init__(self, name, enableLowHigh):
         self.name = name
+        self.size = 16
         self.setEnableLowHigh = enableLowHigh
         # Enable low high will determine if the register allows 8-bit access
         if enableLowHigh:
@@ -48,6 +49,7 @@ class Register:
 class subRegister:
     def __init__(self, name, low, inputFunc, outputFunc):
         self.name = name
+        self.size = 8
         self.isLow = low
         self.input = inputFunc
         self.output = outputFunc

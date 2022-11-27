@@ -1,16 +1,35 @@
+from Supporitng_Functions import compliment
+
+
 def convertToBinary(value, size=16):
-    # Default argument 16 for whole register
-    if size == 16 or size == 8:
-        binary = bin(value)
-        str_bin = str(binary)
+    if size != 16 and size != 8:
+        print("Register can only be 16-bits or 8-bits")
+        return
+
+    binary = bin(value)
+    str_bin = str(binary)
+    negative = False
+
+    if value < 0:
+        # Value Negative need to store in 2's Complement Form
+        str_bin = str_bin[3:]
+        negative = True
+    else:
+        # Value not negative
         str_bin = str_bin[2:]
-        if len(str_bin) > size:
-            print(f"Size Mismatch: Register can hold {size}-bits only")
-            return False
-        else:
-            str_bin = "0" * (size - len(str_bin)) + str_bin
-            # filling the string with 0s
-            return [int(x) for x in str_bin]
+
+    str_bin = "0" * (size - len(str_bin)) + str_bin
+    # filling the string with 0s
+
+    if negative:
+        # If negative take compliment
+        str_bin = compliment(str_bin)
+
+    if len(str_bin) > size:
+        print(f"Size Mismatch: Register can hold {size}-bits only")
+        return False
+    else:
+        return [int(x) for x in str_bin]
 
 
 class Content_Array:
