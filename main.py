@@ -1,7 +1,5 @@
 from commands import *
 from Register_Instances import *
+from Supporitng_Functions import compliment
 
-AX.input(64)
-AX.printContent()
-inc(AL)
-AX.printContent()
+inc()
