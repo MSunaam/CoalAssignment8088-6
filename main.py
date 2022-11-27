@@ -1,2 +1,2 @@
 from commands import *
-from Supporitng_Functions import checkRegister
+from Register_Instances import *

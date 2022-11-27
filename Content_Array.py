@@ -1,9 +1,24 @@
-from Supporitng_Functions import compliment
+def compliment(value):
+    listBin = list(value)
+    length = len(listBin)
+    first1 = False
+    for char in range(length - 1, -1, -1):
+        if listBin[char] == '0' and not first1:
+            pass
+        elif listBin[char] == '1' and not first1:
+            first1 = True
+        else:
+            if listBin[char] == '1':
+                listBin[char] = '0'
+            else:
+                listBin[char] = '1'
+
+    return ''.join(map(str, listBin))
 
 
-def convertToBinary(value, size=16):
+def convertToBinary(value, size=16, rM='Register'):
     if size != 16 and size != 8:
-        print("Register can only be 16-bits or 8-bits")
+        print(f"{rM} can only be 16-bits or 8-bits")
         return
 
     binary = bin(value)
