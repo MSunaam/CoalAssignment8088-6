@@ -4,8 +4,12 @@ from Register_Instances import *
 # Increments Register
 
 def inc(register):
-    if register not in Reg:
-        print("Register Error, Register does not exist")
+    if register in Reg.keys():
+        register = Reg[register]
+    elif register in SubReg.keys():
+        register = SubReg[register]
+    else:
+        print("Error: Register does not exist")
         return
 
     value = register.getData()
