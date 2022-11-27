@@ -6,6 +6,7 @@ def convertToBinary(value, size=16):
         str_bin = str_bin[2:]
         if len(str_bin) > size:
             print(f"Size Mismatch: Register can hold {size}-bits only")
+            return False
         else:
             str_bin = "0" * (size - len(str_bin)) + str_bin
             # filling the string with 0s
@@ -21,16 +22,25 @@ class Content_Array:
 
     def input(self, value):
         # 16-bits input into X
+        if not convertToBinary(value):
+            return
+        # If size mismatch occurs, return and value not changes
         self.content = convertToBinary(value)
 
     def inputH(self, value):
         # 8-bits input into Higher(H)
+        if not convertToBinary(value, 8):
+            return
+        # If size mismatch occurs, return and value not changes
         for x in range(8):
             self.content[x] = convertToBinary(value, 8)[x]
             # This will change only the first 8-bits
 
     def inputL(self, value):
         # 8-bits input into Lower(L)
+        if not convertToBinary(value, 8):
+            return
+        # If size mismatch occurs, return and value not changes
         for x in range(8, 16):
             self.content[abs(x)] = convertToBinary(value, 8)[abs(x - 8)]
             # Content array needs to be accessed from 8 to 15 but convertToBinary needs to accessed from 0 to 7
@@ -56,6 +66,10 @@ class Content_Array:
         # Get the higher part of the array
         return [self.content[x] for x in range(8)]
 
+    def getData(self):
+        # Get the whole array
+        return self.content
+
     def print(self):
         # Temp function to check Array (Testing)
         print(self.content)
@@ -78,3 +92,27 @@ class Content_Array_16(Content_Array):
 
     def getHigh(self):
         pass
+
+    def SF(self, setFlag):
+        if setFlag:
+            self.content[15] = 1
+        else:
+            self.content[15] = 0
+
+    def OF(self, setFlag):
+        if setFlag:
+            self.content[14] = 1
+        else:
+            self.content[14] = 0
+
+    def ZF(self, setFlag):
+        if setFlag:
+            self.content[13] = 1
+        else:
+            self.content[13] = 0
+
+    def CF(self, setFlag):
+        if setFlag:
+            self.content[12] = 1
+        else:
+            self.content[12] = 0
