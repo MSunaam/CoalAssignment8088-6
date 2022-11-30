@@ -1,4 +1,3 @@
-from Register_Instances import *
 from collections import deque
 from Supporitng_Functions import checkRegister, returnDecimal
 
@@ -77,3 +76,17 @@ def rotate(register, times):
     deq = deque(register.content.content)
     deq.rotate(times)
     register.content.content = list(deq)
+
+
+def shr(rm, times, isMemory):
+    # Shift the Register/Memory right times times
+    if not isMemory:
+        # rm is register
+        check, register = checkRegister(rm)
+        if not check:
+            print('Register Incorrect')
+            return
+        # Register Correct
+        # Using Deque because pop has O(1) complexity
+       deq = deque(register.content.content)
+        

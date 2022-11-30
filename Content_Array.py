@@ -54,6 +54,10 @@ class Content_Array:
         self.content = convertToBinary(0)
         # Initialize the array with 0s
 
+    def getSign(self):
+        # Return msb
+        return self.content[0]
+
     def input(self, value):
         # 16-bits input into X
         if not convertToBinary(value):
