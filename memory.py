@@ -10,6 +10,9 @@ class Memory_Array:
     def input(self, value):
         self.array = convertToBinary(value, 8, "Memory")
 
+    def inputList(self, inputList):
+        self.array = inputList
+
     def getData(self):
         return self.array
 

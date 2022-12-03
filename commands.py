@@ -198,33 +198,228 @@ def setBitwise(register, binaryString):
     return True, binaryString, register
 
 
-def AND(register, binaryString):
-    # Set binary string and validate
-    check, binaryString, register = setBitwise(register, binaryString)
-    # check
-    if not check:
+# def AND(register, binaryString):
+#     # Set binary string and validate
+#     check, binaryString, register = setBitwise(register, binaryString)
+#     # check
+#     if not check:
+#         return
+#     # Get Register Values
+#     values = register.getData()
+#     # Take AND
+#     for x in range(register.size):
+#         values[x] = (values[x] & int(binaryString[x], 2))
+#
+#     # Set Register Values
+#     register.inputList(values)
+
+def AND(mode, rm1='', rm2='', binaryString=''):
+    # rm1 will always be reg and rm2 may be reg or mem
+    if mode == 1 or mode == 2:
+        check, register = checkRegister(rm1)
+        if not check:
+            print("Register Incorrect")
+            return
+        check, memory = checkMemory(rm2)
+        if not check:
+            print("Memory Out of Range")
+            return
+
+        # Get register values
+        valuesReg = register.getData()
+        # Get Memory values
+        # Memory Size is always 8
+        valuesMem = memory.getData()
+
+        if mode == 1:
+            # mode = 1 = REG, Mem
+            if register.size == 8:
+                for x in range(8):
+                    valuesReg[x] = valuesReg[x] & valuesMem[x]
+                register.inputList(valuesReg)
+                return
+            else:
+                # Register Size = 16
+                for x in range(8):
+                    valuesMem.insert(0, 0)
+                for x in range(16):
+                    valuesReg[x] = valuesReg[x] & valuesMem[x]
+                register.inputList(valuesReg)
+                return
+        elif mode == 2:
+            # mode = 2 = mem, Reg
+            if register.size == 16:
+                valuesReg = valuesReg[-8:]
+            # Take AND
+            for x in range(8):
+                valuesMem[x] = valuesMem[x] & valuesReg[x]
+            memory.inputList(valuesReg)
+            return
+    elif mode == 3:
+        # mode = 3 = Reg, Reg
+        check1, reg1 = checkRegister(rm1)
+        check2, reg2 = checkRegister(rm2)
+        if not check2 and check1:
+            print("Registers Incorrect")
+            return
+        valuesReg1 = reg1.getData()
+        valuesReg2 = reg2.getData()
+        if reg1.size == 16 and reg2.size == 16:
+            for x in range(16):
+                valuesReg1[x] = valuesReg1[x] & valuesReg2[x]
+        elif reg1.size == 8 and reg2.size == 8:
+            for x in range(8):
+                valuesReg1[x] = valuesReg1[x] & valuesReg2[x]
+        elif reg1.size == 8 and reg2.size == 16:
+            valuesReg2 = valuesReg2[-8:]
+            for x in range(8):
+                valuesReg1[x] = valuesReg1[x] & valuesReg2[x]
+        elif reg1.size == 16 and reg2.size == 8:
+            for x in range(8):
+                valuesReg2.insert(0, 0)
+            for x in range(16):
+                valuesReg1[x] = valuesReg1[x] & valuesReg2[x]
+        reg1.inputList(valuesReg1)
         return
-    # Get Register Values
-    values = register.getData()
-    # Take AND
-    for x in range(register.size):
-        values[x] = (values[x] & int(binaryString[x], 2))
-
-    # Set Register Values
-    register.inputList(values)
-
-
-def OR(register, binaryString):
-    # Set binary string and validate
-    check, binaryString, register = setBitwise(register, binaryString)
-    # check
-    if not check:
+    elif mode == 4:
+        # mode = 4 = mem, imm
+        check, memory = checkMemory(rm1)
+        if not check:
+            print("Memory Incorrect")
+            return
+        # Get mem value
+        valueMem = memory.getData()
+        # Pad zeros
+        if len(binaryString) < 8:
+            binaryString = '0' * (8 - len(binaryString)) + binaryString
+        elif len(binaryString) > 8:
+            binaryString = binaryString[-8:]
+        # Take AND
+        for x in range(8):
+            valueMem[x] = valueMem[x] & int(binaryString[x])
+        memory.inputList(valueMem)
         return
-    # Get Register Values
-    values = register.getData()
-    # Take AND
-    for x in range(register.size):
-        values[x] = (values[x] | int(binaryString[x], 2))
+    elif mode == 5:
+        # mode = 5 = reg, imm
+        check, register = checkRegister(rm1)
+        if not check:
+            print("Register Incorrect")
+            return
+        # Get mem value
+        valueReg = register.getData()
+        # Pad zeros
+        if len(binaryString) < register.size:
+            binaryString = '0' * (register.size - len(binaryString)) + binaryString
+        elif len(binaryString) > register.size:
+            binaryString = binaryString[-register.size:]
+        # Take AND
+        for x in range(register.size):
+            valueReg[x] = valueReg[x] & int(binaryString[x])
+        register.inputList(valueReg)
+        return
 
-    # Set Register Values
-    register.inputList(values)
+
+def OR(mode, rm1='', rm2='', binaryString=''):
+    # rm1 will always be reg and rm2 may be reg or mem
+    if mode == 1 or mode == 2:
+        check, register = checkRegister(rm1)
+        if not check:
+            print("Register Incorrect")
+            return
+        check, memory = checkMemory(rm2)
+        if not check:
+            print("Memory Out of Range")
+            return
+
+        # Get register values
+        valuesReg = register.getData()
+        # Get Memory values
+        # Memory Size is always 8
+        valuesMem = memory.getData()
+
+        if mode == 1:
+            # mode = 1 = REG, Mem
+            if register.size == 8:
+                for x in range(8):
+                    valuesReg[x] = valuesReg[x] | valuesMem[x]
+                register.inputList(valuesReg)
+                return
+            else:
+                # Register Size = 16
+                for x in range(8):
+                    valuesMem.insert(0, 0)
+                for x in range(16):
+                    valuesReg[x] = valuesReg[x] | valuesMem[x]
+                register.inputList(valuesReg)
+                return
+        elif mode == 2:
+            # mode = 2 = mem, Reg
+            if register.size == 16:
+                valuesReg = valuesReg[-8:]
+            # Take AND
+            for x in range(8):
+                valuesMem[x] = valuesMem[x] | valuesReg[x]
+            memory.inputList(valuesReg)
+            return
+    elif mode == 3:
+        # mode = 3 = Reg, Reg
+        check1, reg1 = checkRegister(rm1)
+        check2, reg2 = checkRegister(rm2)
+        if not check2 and check1:
+            print("Registers Incorrect")
+            return
+        valuesReg1 = reg1.getData()
+        valuesReg2 = reg2.getData()
+        if reg1.size == 16 and reg2.size == 16:
+            for x in range(16):
+                valuesReg1[x] = valuesReg1[x] | valuesReg2[x]
+        elif reg1.size == 8 and reg2.size == 8:
+            for x in range(8):
+                valuesReg1[x] = valuesReg1[x] | valuesReg2[x]
+        elif reg1.size == 8 and reg2.size == 16:
+            valuesReg2 = valuesReg2[-8:]
+            for x in range(8):
+                valuesReg1[x] = valuesReg1[x] | valuesReg2[x]
+        elif reg1.size == 16 and reg2.size == 8:
+            for x in range(8):
+                valuesReg2.insert(0, 0)
+            for x in range(16):
+                valuesReg1[x] = valuesReg1[x] | valuesReg2[x]
+        reg1.inputList(valuesReg1)
+        return
+    elif mode == 4:
+        # mode = 4 = mem, imm
+        check, memory = checkMemory(rm1)
+        if not check:
+            print("Memory Incorrect")
+            return
+        # Get mem value
+        valueMem = memory.getData()
+        # Pad zeros
+        if len(binaryString) < 8:
+            binaryString = '0' * (8 - len(binaryString)) + binaryString
+        elif len(binaryString) > 8:
+            binaryString = binaryString[-8:]
+        # Take AND
+        for x in range(8):
+            valueMem[x] = valueMem[x] | int(binaryString[x])
+        memory.inputList(valueMem)
+        return
+    elif mode == 5:
+        # mode = 5 = reg, imm
+        check, register = checkRegister(rm1)
+        if not check:
+            print("Register Incorrect")
+            return
+        # Get mem value
+        valueReg = register.getData()
+        # Pad zeros
+        if len(binaryString) < register.size:
+            binaryString = '0' * (register.size - len(binaryString)) + binaryString
+        elif len(binaryString) > register.size:
+            binaryString = binaryString[-register.size:]
+        # Take AND
+        for x in range(register.size):
+            valueReg[x] = valueReg[x] | int(binaryString[x])
+        register.inputList(valueReg)
+        return

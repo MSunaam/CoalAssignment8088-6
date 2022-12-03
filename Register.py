@@ -49,7 +49,7 @@ class Register:
         self.content.content = inputList
 
     def inputListLow(self, inputList):
-        for x in range(8, 15):
+        for x in range(8, 16):
             self.content.content[x] = inputList[x - 8]
 
     def inputListHigh(self, inputList):
