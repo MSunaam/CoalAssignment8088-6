@@ -1,4 +1,4 @@
-from Register import Register
+from Register import Register, FlagsReg
 
 # We have 8 16-bit Registers and 4 lower registers and 4 higher registers
 

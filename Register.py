@@ -12,8 +12,8 @@ class Register:
         if enableLowHigh:
             # 8-bit access allowed
             self.content = Content_Array()
-            self.lowerSubReg = subRegister(self.name[0] + "L", True, self.inputLow, self.getLow)
-            self.higherSubReg = subRegister(self.name[0] + "H", False, self.inputHigh, self.getHigh)
+            self.lowerSubReg = subRegister(self.name[0] + "L", True, self.inputLow, self.getLow, self.inputListLow)
+            self.higherSubReg = subRegister(self.name[0] + "H", False, self.inputHigh, self.getHigh, self.inputListHigh)
 
         else:
             self.content = Content_Array_16()
@@ -45,15 +45,30 @@ class Register:
         # For getting low 8-bits
         return self.content.getLow()
 
+    def inputList(self, inputList):
+        self.content.content = inputList
+
+    def inputListLow(self, inputList):
+        for x in range(8, 15):
+            self.content.content[x] = inputList[x - 8]
+
+    def inputListHigh(self, inputList):
+        for x in range(8):
+            self.content.content[x] = inputList[x]
+
 
 class subRegister:
-    def __init__(self, name, low, inputFunc, outputFunc):
+    def __init__(self, name, low, inputFunc, outputFunc, inputList):
         self.name = name
         self.size = 8
         self.isLow = low
         self.input = inputFunc
         self.output = outputFunc
+        self.inputList = inputList
         # It has size of 8-bits
+
+    def inputList(self, inputList):
+        self.inputList(inputList)
 
     def input(self, values):
         self.input(values)
@@ -61,11 +76,18 @@ class subRegister:
     def getData(self):
         return self.output()
 
+    def printContent(self):
+        print(self.getData())
+
 
 class FlagsReg:
     def __init__(self):
         self.content = Content_Array_16()
         # Only lower 4-bits are used for the flags CF,OF,ZF and SF
+
+    def printFlags(self):
+        print(
+            f"CF: {self.content.content[12]}\tZF: {self.content.content[13]}\tOF: {self.content.content[14]}\tSF: {self.content.content[15]}")
 
     def SF(self, setFlag):
         self.content.SF(setFlag)
