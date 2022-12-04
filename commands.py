@@ -1,6 +1,5 @@
 from collections import deque
-from Supporitng_Functions import checkRegister, returnDecimal, checkMemory, flags, checkBinaryString
-from MachineCode import MachineCode
+from Supporitng_Functions import checkRegister, returnDecimal, checkMemory, flags
 
 
 # Opcode = 10
