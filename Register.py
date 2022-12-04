@@ -63,3 +63,51 @@ class Register:
 
     def getCode(self):
         return self.code
+
+    class subRegister:
+        def _init_(self, name, low, inputFunc, outputFunc, inputList, code):
+         self.code = code
+         self.name = name
+         self.size = 8
+         self.isLow = low
+         self.input = inputFunc
+         self.output = outputFunc
+         self.inputList = inputList
+        # It has size of 8-bits
+
+    def getCode(self):
+        return self.code
+
+    def inputList(self, inputList):
+        self.inputList(inputList)
+
+    def input(self, values):
+        self.input(values)
+
+    def getData(self):
+        return self.output()
+
+    def printContent(self):
+        print(self.getData())
+
+
+class FlagsReg:
+    def _init_(self):
+        self.content = Content_Array_16()
+        # Only lower 4-bits are used for the flags CF,OF,ZF and SF
+
+    def printFlags(self):
+        print(
+            f"CF: {self.content.content[12]}\tZF: {self.content.content[13]}\tOF: {self.content.content[14]}\tSF: {self.content.content[15]}")
+
+    def SF(self, setFlag):
+        self.content.SF(setFlag)
+
+    def OF(self, setFlag):
+        self.content.OF(setFlag)
+
+    def ZF(self, setFlag):
+        self.content.ZF(setFlag)
+
+    def CF(self, setFlag):
+        self.content.CF(setFlag)
