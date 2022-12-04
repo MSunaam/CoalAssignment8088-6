@@ -66,3 +66,56 @@ def rotate(machineCode, rm, times, isMemory):
         deq = deque(valueMem)
         deq.rotate(times)
         memory.inputList(list(deq))
+
+
+def shr(machineCode, rm, times, isMemory):
+    # Set Opcode
+    machineCode.setOpcode('0011')
+    # Set imm
+    imm = bin(times if times > 0 else times + (1 << 8))[2:]
+    imm = imm.zfill(8)
+    machineCode.setImm(imm)
+    # Shift the Register/Memory right times times
+    # If times is negative use SHL
+    if times < 0:
+        shl(machineCode, rm, abs(times), isMemory)
+    if not isMemory:
+        # rm is register
+        check, register = checkRegister(rm, machineCode)
+        if not check:
+            print('Register Incorrect')
+            return
+        # Register Correct
+        # Set Register code
+        machineCode.setReg(register.code)
+        # Get Register Values
+        values = register.getData()
+        # Using Deque because pop has O(1) complexity
+
+        deq = deque(values)
+        for x in range(times):
+            if x == times - 1:
+                # Last Iteration Store bit in CF
+                flags.CF(deq[register.size - 1])
+            deq.pop()
+            deq.appendleft(0)
+        register.inputList(list(deq))
+    else:
+        # rm is memory
+        check, memory = checkMemory(rm, machineCode)
+        if not check:
+            # rm is incorrect memory
+            print("Memory out of range")
+            return
+        else:
+            # Correct memory
+            # Using deque because of less complexity
+            deq = deque(memory.array)
+            for x in range(times):
+                if x == times - 1:
+                    # Last Iteration store the bit in CF
+                    flags.CF(memory.array[7])
+                deq.pop()
+                deq.appendleft(0)
+            memory.array = list(deq)
+
