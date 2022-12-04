@@ -1,3 +1,21 @@
+from Register_Instances import *
+from Memory_Instances import *
+
+
+def checkRegister(register, machineCode):
+    # Check if register exists
+    if register in Reg.keys():
+        register = Reg[register]
+        machineCode.setWBit('1')
+        return True, register
+    elif register in SubReg.keys():
+        register = SubReg[register]
+        machineCode.setWBit('0')
+        return True, register
+    else:
+        return False, None
+
+
 def rol(machineCode, rm, times, isMemory):
     # Set immediateData
     imm = str(bin(times if times > 0 else times + (1 << 8)))[2:]
@@ -171,3 +189,5 @@ def shl(machineCode, rm, times, isMemory):
                 deq.popleft()
                 deq.append(0)
             memory.array = list(deq)
+
+
