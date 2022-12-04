@@ -39,7 +39,7 @@ def checkMemory(memory, machineCode):
         else:
             return False
 
-        
+
 def rol(machineCode, rm, times, isMemory):
     # Set immediateData
     imm = str(bin(times if times > 0 else times + (1 << 8)))[2:]
