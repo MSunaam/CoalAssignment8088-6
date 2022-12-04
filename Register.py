@@ -67,12 +67,12 @@ class Register:
     class subRegister:
         def _init_(self, name, low, inputFunc, outputFunc, inputList, code):
          self.code = code
-        self.name = name
-        self.size = 8
-        self.isLow = low
-        self.input = inputFunc
-        self.output = outputFunc
-        self.inputList = inputList
+         self.name = name
+         self.size = 8
+         self.isLow = low
+         self.input = inputFunc
+         self.output = outputFunc
+         self.inputList = inputList
         # It has size of 8-bits
 
     def getCode(self):
