@@ -15,7 +15,16 @@ def checkRegister(register, machineCode):
     else:
         return False, None
 
+def checkMemory(memory, machineCode):
+    # Check if memory is in range
+    if memory in mem.keys():
+        machineCode.setRM2(bin(int(memory, 16))[2:].zfill(4))
+        memory = mem[memory]
+        return True, memory
+    else:
+        return False, None
 
+    
 def rol(machineCode, rm, times, isMemory):
     # Set immediateData
     imm = str(bin(times if times > 0 else times + (1 << 8)))[2:]
