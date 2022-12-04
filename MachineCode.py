@@ -15,7 +15,7 @@ class MachineCode:
         self.opcode = ''
         self.dBit = '0'
         self.wBit = '0'
-        self.mod = '00'
+        self.mod = '0'
         self.reg = '000'
         self.rm2 = '0000'
         self.imm = ''

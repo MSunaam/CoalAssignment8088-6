@@ -5,6 +5,8 @@ from MachineCode import MachineCode
 
 machineCode = MachineCode()
 
-inc(machineCode, 'A', True)
-mem['A'].printMemory()
+AX.input(5)
+moveMemReg(machineCode, 'ax', 'F')
+mem['F'].printMemory()
+
 machineCode.print()

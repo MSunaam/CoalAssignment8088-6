@@ -12,6 +12,7 @@ class Register:
         # Enable low high will determine if the register allows 8-bit access
         if enableLowHigh:
             # 8-bit access allowed
+            self.type = 1  # General Purpose Register
             self.content = Content_Array()
             self.lowerSubReg = subRegister(self.name[0] + "L", True, self.inputLow, self.getLow, self.inputListLow,
                                            str(bin(code + 4))[2:].zfill(3))
@@ -20,6 +21,7 @@ class Register:
 
         else:
             self.content = Content_Array_16()
+            self.type = 0  # Segment Register
 
     def printContent(self):
         print(self.content.getData())
