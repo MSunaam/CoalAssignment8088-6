@@ -24,7 +24,22 @@ def checkMemory(memory, machineCode):
     else:
         return False, None
 
-    
+    def returnDecimal(listValue):
+        # Returns the register's decimal value passed
+        value = listValue
+        value = ''.join(map(str, value))
+        value = int(value, 2)
+        return value
+
+    def checkBinaryString(string):
+        P = set(string)
+        S = {'0', '1'}
+        if P == S or P == {'1'} or P == {'0'}:
+            return True
+        else:
+            return False
+
+        
 def rol(machineCode, rm, times, isMemory):
     # Set immediateData
     imm = str(bin(times if times > 0 else times + (1 << 8)))[2:]
