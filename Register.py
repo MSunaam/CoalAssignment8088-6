@@ -4,7 +4,8 @@ from Content_Array import convertToBinary
 
 
 class Register:
-    def __init__(self, name, enableLowHigh):
+    def __init__(self, name, enableLowHigh, code):
+        self.code = str(bin(code))[2:].zfill(3)
         self.name = name
         self.size = 16
         self.setEnableLowHigh = enableLowHigh
@@ -12,8 +13,10 @@ class Register:
         if enableLowHigh:
             # 8-bit access allowed
             self.content = Content_Array()
-            self.lowerSubReg = subRegister(self.name[0] + "L", True, self.inputLow, self.getLow, self.inputListLow)
-            self.higherSubReg = subRegister(self.name[0] + "H", False, self.inputHigh, self.getHigh, self.inputListHigh)
+            self.lowerSubReg = subRegister(self.name[0] + "L", True, self.inputLow, self.getLow, self.inputListLow,
+                                           str(bin(code + 4))[2:].zfill(3))
+            self.higherSubReg = subRegister(self.name[0] + "H", False, self.inputHigh, self.getHigh, self.inputListHigh,
+                                            str(bin(code))[2:].zfill(3))
 
         else:
             self.content = Content_Array_16()
@@ -56,9 +59,13 @@ class Register:
         for x in range(8):
             self.content.content[x] = inputList[x]
 
+    def getCode(self):
+        return self.code
+
 
 class subRegister:
-    def __init__(self, name, low, inputFunc, outputFunc, inputList):
+    def __init__(self, name, low, inputFunc, outputFunc, inputList, code):
+        self.code = code
         self.name = name
         self.size = 8
         self.isLow = low
@@ -66,6 +73,9 @@ class subRegister:
         self.output = outputFunc
         self.inputList = inputList
         # It has size of 8-bits
+
+    def getCode(self):
+        return self.code
 
     def inputList(self, inputList):
         self.inputList(inputList)
