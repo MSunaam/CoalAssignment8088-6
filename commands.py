@@ -87,8 +87,45 @@ def moveMemReg(machineCode, reg, mem):
 def moveRegImm(machineCode, reg, imm):
     # Get Opcode
     machineCode.setOpcode('1101')
+    # Set mode
+    machineCode.setMode('1')
     # Check register
-    
+    check, register = checkRegister(reg, machineCode)
+    if not check:
+        print('Invalid Register')
+        return
+    # Get register Code
+    machineCode.setReg(register.getCode())
+    # Get immediate data
+    # Set imm
+    data = bin(imm if imm > 0 else imm + (1 << 8))[2:]
+    data = data.zfill(8)
+    machineCode.setImm(data)
+    # Transfer to reg
+    register.input(imm)
+    return
+
+
+# Opcode = 14
+def movMemImm(machineCode, mem, imm):
+    # Get Opcode
+    machineCode.setOpcode('1111')
+    # Set mode
+    machineCode.setMode('0')
+    # Get memory
+    check, memory = checkMemory(mem, machineCode)
+    if not check:
+        print("Incorrect Memory")
+        return
+    # Get immediate data
+    # Set imm
+    data = bin(imm if imm > 0 else imm + (1 << 8))[2:]
+    data = data.zfill(8)
+    machineCode.setImm(data)
+    # Transfer to mem
+    memory.input(imm)
+    return
+
 
 # Support
 def printFlags():
@@ -263,7 +300,7 @@ def shr(machineCode, rm, times, isMemory):
     machineCode.setOpcode('0011')
     # Set imm
     imm = bin(times if times > 0 else times + (1 << 8))[2:]
-    imm.zfill(8)
+    imm = imm.zfill(8)
     machineCode.setImm(imm)
     # Shift the Register/Memory right times times
     # If times is negative use SHL
@@ -316,7 +353,7 @@ def shl(machineCode, rm, times, isMemory):
     machineCode.setOpcode('0100')
     # Set imm
     imm = bin(times if times > 0 else times + (1 << 8))[2:]
-    imm.zfill(8)
+    imm = imm.zfill(8)
     machineCode.setImm(imm)
     # Shift the Register/Memory left times times
     # If times is negative use SHR
