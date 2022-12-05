@@ -1,3 +1,45 @@
+from Register_Instances import *
+from Memory_Instances import *
+
+
+def checkRegister(register, machineCode):
+    # Check if register exists
+    if register in Reg.keys():
+        register = Reg[register]
+        machineCode.setWBit('1')
+        return True, register
+    elif register in SubReg.keys():
+        register = SubReg[register]
+        machineCode.setWBit('0')
+        return True, register
+    else:
+        return False, None
+
+def checkMemory(memory, machineCode):
+    # Check if memory is in range
+    if memory in mem.keys():
+        machineCode.setRM2(bin(int(memory, 16))[2:].zfill(4))
+        memory = mem[memory]
+        return True, memory
+    else:
+        return False, None
+
+    def returnDecimal(listValue):
+        # Returns the register's decimal value passed
+        value = listValue
+        value = ''.join(map(str, value))
+        value = int(value, 2)
+        return value
+
+    def checkBinaryString(string):
+        P = set(string)
+        S = {'0', '1'}
+        if P == S or P == {'1'} or P == {'0'}:
+            return True
+        else:
+            return False
+
+
 def rol(machineCode, rm, times, isMemory):
     # Set immediateData
     imm = str(bin(times if times > 0 else times + (1 << 8)))[2:]
@@ -66,3 +108,110 @@ def rotate(machineCode, rm, times, isMemory):
         deq = deque(valueMem)
         deq.rotate(times)
         memory.inputList(list(deq))
+
+
+def shr(machineCode, rm, times, isMemory):
+    # Set Opcode
+    machineCode.setOpcode('0011')
+    # Set imm
+    imm = bin(times if times > 0 else times + (1 << 8))[2:]
+    imm = imm.zfill(8)
+    machineCode.setImm(imm)
+    # Shift the Register/Memory right times times
+    # If times is negative use SHL
+    if times < 0:
+        shl(machineCode, rm, abs(times), isMemory)
+    if not isMemory:
+        # rm is register
+        check, register = checkRegister(rm, machineCode)
+        if not check:
+            print('Register Incorrect')
+            return
+        # Register Correct
+        # Set Register code
+        machineCode.setReg(register.code)
+        # Get Register Values
+        values = register.getData()
+        # Using Deque because pop has O(1) complexity
+
+        deq = deque(values)
+        for x in range(times):
+            if x == times - 1:
+                # Last Iteration Store bit in CF
+                flags.CF(deq[register.size - 1])
+            deq.pop()
+            deq.appendleft(0)
+        register.inputList(list(deq))
+    else:
+        # rm is memory
+        check, memory = checkMemory(rm, machineCode)
+        if not check:
+            # rm is incorrect memory
+            print("Memory out of range")
+            return
+        else:
+            # Correct memory
+            # Using deque because of less complexity
+            deq = deque(memory.array)
+            for x in range(times):
+                if x == times - 1:
+                    # Last Iteration store the bit in CF
+                    flags.CF(memory.array[7])
+                deq.pop()
+                deq.appendleft(0)
+            memory.array = list(deq)
+
+
+
+def shl(machineCode, rm, times, isMemory):
+    # Set Opcode
+    machineCode.setOpcode('0100')
+    # Set imm
+    imm = bin(times if times > 0 else times + (1 << 8))[2:]
+    imm = imm.zfill(8)
+    machineCode.setImm(imm)
+    # Shift the Register/Memory left times times
+    # If times is negative use SHR
+    if times < 0:
+        shr(machineCode, rm, abs(times), isMemory)
+    if not isMemory:
+        # rm is register
+        check, register = checkRegister(rm, machineCode)
+        if not check:
+            print('Register Incorrect')
+            return
+        # Register Correct
+        # Set Register code
+        machineCode.setReg(register.code)
+        # Get Register Values
+        values = register.getData()
+        # Using Deque because pop has O(1) complexity
+
+        deq = deque(values)
+        for x in range(times):
+            if x == times - 1:
+                # Last Iteration Store bit in CF
+                flags.CF(deq[0])
+            deq.popleft()
+            deq.append(0)
+        register.inputList(list(deq))
+    else:
+        # rm is memory
+        check, memory = checkMemory(rm, machineCode)
+        if not check:
+            # rm is incorrect memory
+            print("Memory out of range")
+            return
+        else:
+            # Correct memory
+            # Using deque because of less complexity
+            deq = deque(memory.array)
+            for x in range(times):
+                if x == times - 1:
+                    # Last Iteration store the bit in CF
+                    flags.CF(deq[0])
+                deq.popleft()
+                deq.append(0)
+            memory.array = list(deq)
+
+
