@@ -8,9 +8,14 @@ machineCodes = MachineCode()
 
 
 def stringToFunction(string, machineCode):
+    errorMsg = ''
     string = string.lower()
     listOperands = stringToList(string)
     memory = isMemory(string)
+    if string.count('[') == 1 or string.count(']') == 1:
+        print("Invalid Operands")
+        errorMsg += 'Invalid Operands'
+        return errorMsg
 
     if len(memory) > 1:
         # At max each instruction can have 1 memory operand
@@ -22,7 +27,8 @@ def stringToFunction(string, machineCode):
         if not check:
             # Memory is not in range
             print("Memory is not in range")
-            return
+            errorMsg += "Memory is not in range"
+            return errorMsg
     else:
         # No memory Operand
         memory = None
@@ -32,7 +38,8 @@ def stringToFunction(string, machineCode):
         # Check if move valid
         if len(listOperands) != 3:
             print('Error Invalid Command')
-            return False
+            errorMsg += 'Error Invalid Command'
+            return errorMsg
         # Check which move
         # Check if memory exists
         if memory is None:
@@ -50,7 +57,8 @@ def stringToFunction(string, machineCode):
             else:
                 # First operand is not a register
                 print("Invalid Operands")
-                return False
+                errorMsg += "Invalid Operands"
+                return errorMsg
         else:
             # Memory is used
             # Check first operand
@@ -68,7 +76,8 @@ def stringToFunction(string, machineCode):
         # Check operands
         if len(listOperands) > 2:
             print("Error, Invalid Operands")
-            return False
+            errorMsg += 'Error, Invalid Operands'
+            return errorMsg
         if memory is not None:
             # Increment Register
             inc(machineCode, listOperands[1], False)
@@ -79,7 +88,8 @@ def stringToFunction(string, machineCode):
         # Check operands
         if len(listOperands) > 2:
             print("Error, Invalid Operands")
-            return False
+            errorMsg += "Error, Invalid Operands"
+            return errorMsg
         if memory is not None:
             # Increment Register
             dec(machineCode, listOperands[1], False)
@@ -102,14 +112,107 @@ def stringToFunction(string, machineCode):
         else:
             # memory
             rol(machineCode, listOperands[1][1].upper(), int(listOperands[2]), False)
+    elif listOperands[0] == 'shl':
+        # Check if memory or register
+        if memory is None:
+            # Register
+            shl(machineCode, listOperands[1], int(listOperands[2]), False)
+        else:
+            shl(machineCode, listOperands[1][1].upper(), int(listOperands[2]), True)
+    elif listOperands[0] == 'shr':
+
+        # Check if memory or register
+        if memory is None:
+            # Register
+            shr(machineCode, listOperands[1], int(listOperands[2]), False)
+        else:
+            shr(machineCode, listOperands[1][1].upper(), int(listOperands[2]), True)
+    elif listOperands[0] == 'and':
+        # Check if memory
+        if memory is None:
+            # Check if reg reg or reg imm
+            if listOperands[2] in SubReg.keys() or listOperands[2] in Reg.keys():
+                # Reg Reg
+                AND(3, machineCode, listOperands[1], listOperands[2])
+            else:
+                # Reg imm
+                AND(5, machineCode, listOperands[1], '', listOperands[2])
+        else:
+            # Memory used
+            # check if reg mem
+            if listOperands[1] in SubReg.keys() or listOperands[1] in Reg.keys():
+                # Reg Mem
+                AND(1, machineCode, listOperands[1], listOperands[2][1].upper())
+            elif listOperands[2] in SubReg.keys() or listOperands[2] in Reg.keys():
+                # Mem Reg
+                AND(2, machineCode, listOperands[2], listOperands[1][1].upper())
+            else:
+                # Mem Imm
+                AND(4, machineCode, '', listOperands[1][1].upper(), listOperands[2])
+    elif listOperands[0] == 'xor':
+        # Check if memory
+        if memory is None:
+            # Check if reg reg or reg imm
+            if listOperands[2] in SubReg.keys() or listOperands[2] in Reg.keys():
+                # Reg Reg
+                XOR(3, machineCode, listOperands[1], listOperands[2])
+            else:
+                # Reg imm
+                XOR(5, machineCode, listOperands[1], '', listOperands[2])
+        else:
+            # Memory used
+            # check if reg mem
+            if listOperands[1] in SubReg.keys() or listOperands[1] in Reg.keys():
+                # Reg Mem
+                XOR(1, machineCode, listOperands[1], listOperands[2][1].upper())
+            elif listOperands[2] in SubReg.keys() or listOperands[2] in Reg.keys():
+                # Mem Reg
+                XOR(2, machineCode, listOperands[2], listOperands[1][1].upper())
+            else:
+                # Mem Imm
+                XOR(4, machineCode, '', listOperands[1][1].upper(), listOperands[2])
+    elif listOperands[0] == 'or':
+        # Check if memory
+        if memory is None:
+            # Check if reg reg or reg imm
+            if listOperands[2] in SubReg.keys() or listOperands[2] in Reg.keys():
+                # Reg Reg
+                OR(3, machineCode, listOperands[1], listOperands[2])
+            else:
+                # Reg imm
+                OR(5, machineCode, listOperands[1], '', listOperands[2])
+        else:
+            # Memory used
+            # check if reg mem
+            if listOperands[1] in SubReg.keys() or listOperands[1] in Reg.keys():
+                # Reg Mem
+                OR(1, machineCode, listOperands[1], listOperands[2][1].upper())
+            elif listOperands[2] in SubReg.keys() or listOperands[2] in Reg.keys():
+                # Mem Reg
+                OR(2, machineCode, listOperands[2], listOperands[1][1].upper())
+            else:
+                # Mem Imm
+                OR(4, machineCode, '', listOperands[1][1].upper(), listOperands[2])
+    elif listOperands[0] == 'not':
+        # Check if memory or register
+        if len(listOperands) > 2:
+            print('Invalid Command')
+            errorMsg += 'Invalid Command'
+            return errorMsg
+        if memory is None:
+            # Register
+            NOT(False, machineCode, listOperands[1])
+        else:
+            # Memory
+            NOT(True, machineCode, listOperands[1][1].upper())
 
 
-AX.input(5)
-BX.input(2)
-mem['F'].input(2)
+AX.input(2)
+BX.input(1)
+mem['F'].input(5)
 
 string = input("A")
 
 stringToFunction(string, machineCodes)
 
-AX.printContent()
+mem['F'].printMemory()

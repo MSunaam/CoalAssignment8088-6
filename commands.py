@@ -448,7 +448,7 @@ def AND(mode, machineCode, rm1='', rm2='', binaryString=''):
             # Take AND
             for x in range(8):
                 valuesMem[x] = valuesMem[x] & valuesReg[x]
-            memory.inputList(valuesReg)
+            memory.inputList(valuesMem)
             return
     elif mode == 3:
         # mode = 3 = Reg, Reg
@@ -483,14 +483,13 @@ def AND(mode, machineCode, rm1='', rm2='', binaryString=''):
         return
     elif mode == 4:
         # mode = 4 = mem, imm
-        check, memory = checkMemory(rm1, machineCode)
+        check, memory = checkMemory(rm2, machineCode)
         if not check:
             print("Memory Incorrect")
             return
         # Set RM
         machineCode.setMode('0')  # Mode 0 memory
-        # set imm
-        machineCode.setImm(binaryString)
+
         # Get mem value
         valueMem = memory.getData()
         # Pad zeros
@@ -498,6 +497,10 @@ def AND(mode, machineCode, rm1='', rm2='', binaryString=''):
             binaryString = '0' * (8 - len(binaryString)) + binaryString
         elif len(binaryString) > 8:
             binaryString = binaryString[-8:]
+
+        # set imm
+        machineCode.setImm(binaryString)
+        
         # Take AND
         for x in range(8):
             valueMem[x] = valueMem[x] & int(binaryString[x])
@@ -513,8 +516,6 @@ def AND(mode, machineCode, rm1='', rm2='', binaryString=''):
         machineCode.setReg(register.getCode())
         # Set mode
         machineCode.setMode('0')  # Mode not required
-        # set imm
-        machineCode.setImm(binaryString)
         # Get mem value
         valueReg = register.getData()
         # Pad zeros
@@ -522,6 +523,9 @@ def AND(mode, machineCode, rm1='', rm2='', binaryString=''):
             binaryString = '0' * (register.size - len(binaryString)) + binaryString
         elif len(binaryString) > register.size:
             binaryString = binaryString[-register.size:]
+        # set imm
+        machineCode.setImm(binaryString)
+
         # Take AND
         for x in range(register.size):
             valueReg[x] = valueReg[x] & int(binaryString[x])
@@ -578,7 +582,7 @@ def OR(mode, machineCode, rm1='', rm2='', binaryString=''):
             # Take AND
             for x in range(8):
                 valuesMem[x] = valuesMem[x] | valuesReg[x]
-            memory.inputList(valuesReg)
+            memory.inputList(valuesMem)
             return
     elif mode == 3:
         # mode = 3 = Reg, Reg
@@ -613,14 +617,12 @@ def OR(mode, machineCode, rm1='', rm2='', binaryString=''):
         return
     elif mode == 4:
         # mode = 4 = mem, imm
-        check, memory = checkMemory(rm1, machineCode)
+        check, memory = checkMemory(rm2, machineCode)
         if not check:
             print("Memory Incorrect")
             return
         # Set RM
         machineCode.setMode('0')  # Mode 0 memory
-        # set imm
-        machineCode.setImm(binaryString)
         # Get mem value
         valueMem = memory.getData()
         # Pad zeros
@@ -628,6 +630,8 @@ def OR(mode, machineCode, rm1='', rm2='', binaryString=''):
             binaryString = '0' * (8 - len(binaryString)) + binaryString
         elif len(binaryString) > 8:
             binaryString = binaryString[-8:]
+        # set imm
+        machineCode.setImm(binaryString)
         # Take AND
         for x in range(8):
             valueMem[x] = valueMem[x] | int(binaryString[x])
@@ -641,8 +645,6 @@ def OR(mode, machineCode, rm1='', rm2='', binaryString=''):
             return
         # Set Reg
         machineCode.setReg(register.getCode())
-        # set imm
-        machineCode.setImm(binaryString)
         # Get mem value
         valueReg = register.getData()
         # Pad zeros
@@ -650,6 +652,8 @@ def OR(mode, machineCode, rm1='', rm2='', binaryString=''):
             binaryString = '0' * (register.size - len(binaryString)) + binaryString
         elif len(binaryString) > register.size:
             binaryString = binaryString[-register.size:]
+        # set imm
+        machineCode.setImm(binaryString)
         # Take AND
         for x in range(register.size):
             valueReg[x] = valueReg[x] | int(binaryString[x])
@@ -705,7 +709,7 @@ def XOR(mode, machineCode, rm1='', rm2='', binaryString=''):
             # Take AND
             for x in range(8):
                 valuesMem[x] = valuesMem[x] ^ valuesReg[x]
-            memory.inputList(valuesReg)
+            memory.inputList(valuesMem)
             return
     elif mode == 3:
         # mode = 3 = Reg, Reg
@@ -740,14 +744,13 @@ def XOR(mode, machineCode, rm1='', rm2='', binaryString=''):
         return
     elif mode == 4:
         # mode = 4 = mem, imm
-        check, memory = checkMemory(rm1, machineCode)
+        check, memory = checkMemory(rm2, machineCode)
         if not check:
             print("Memory Incorrect")
             return
         # Set RM
         machineCode.setMode('0')  # Mode 0 memory
-        # set imm
-        machineCode.setImm(binaryString)
+
         # Get mem value
         valueMem = memory.getData()
         # Pad zeros
@@ -755,6 +758,8 @@ def XOR(mode, machineCode, rm1='', rm2='', binaryString=''):
             binaryString = '0' * (8 - len(binaryString)) + binaryString
         elif len(binaryString) > 8:
             binaryString = binaryString[-8:]
+        # set imm
+        machineCode.setImm(binaryString)
         # Take AND
         for x in range(8):
             valueMem[x] = valueMem[x] ^ int(binaryString[x])
@@ -768,8 +773,7 @@ def XOR(mode, machineCode, rm1='', rm2='', binaryString=''):
             return
         # Set Reg
         machineCode.setReg(register.getCode())
-        # set imm
-        machineCode.setImm(binaryString)
+
         # Get mem value
         valueReg = register.getData()
         # Pad zeros
@@ -777,6 +781,10 @@ def XOR(mode, machineCode, rm1='', rm2='', binaryString=''):
             binaryString = '0' * (register.size - len(binaryString)) + binaryString
         elif len(binaryString) > register.size:
             binaryString = binaryString[-register.size:]
+
+        # set imm
+        machineCode.setImm(binaryString)
+
         # Take AND
         for x in range(register.size):
             valueReg[x] = valueReg[x] ^ int(binaryString[x])
