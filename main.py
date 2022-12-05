@@ -205,14 +205,3 @@ def stringToFunction(string, machineCode):
         else:
             # Memory
             NOT(True, machineCode, listOperands[1][1].upper())
-
-
-AX.input(2)
-BX.input(1)
-mem['F'].input(5)
-
-string = input("A")
-
-stringToFunction(string, machineCodes)
-
-mem['F'].printMemory()
