@@ -1,6 +1,7 @@
 from Register_Instances import *
 from Memory_Instances import *
 from MachineCode import MachineCode
+import re
 
 # Register to Store the State of the Flags
 flags = FlagsReg()
@@ -45,3 +46,14 @@ def checkBinaryString(string):
         return True
     else:
         return False
+
+
+def isMemory(string):
+    matches = re.findall(r'\[(.*?)\]', string)
+    return matches
+
+
+def stringToList(string):
+    string = string.replace(',', ' ')
+    string = string.replace('  ', ' ')
+    return string.split(' ')
