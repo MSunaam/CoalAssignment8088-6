@@ -17,7 +17,7 @@ def movRegReg(machineCode, reg1, reg2):
     if reg1.type == 0 and reg2.type == 0:
         # type 0 means segment register
         print('Cannot move from segment to segment')
-        return
+        return 'Cannot move from segment to segment'
 
     # Get reg and rm for machine code
     machineCode.setReg(reg1.getCode())
@@ -84,6 +84,7 @@ def moveMemReg(machineCode, reg, mem):
 
 # Opcode = 13
 def moveRegImm(machineCode, reg, imm):
+    imm = int(imm)
     # Get Opcode
     machineCode.setOpcode('1101')
     # Set mode
@@ -92,14 +93,18 @@ def moveRegImm(machineCode, reg, imm):
     check, register = checkRegister(reg, machineCode)
     if not check:
         print('Invalid Register')
-        return
+        errorMsg = "Invalid Register"
+        return errorMsg
     # Get register Code
     machineCode.setReg(register.getCode())
     # Get immediate data
     # Set imm
-    data = bin(imm if imm > 0 else imm + (1 << 8))[2:]
+    data = bin((imm) if (imm) > 0 else (imm) + (1 << 8))[2:]
     data = data.zfill(8)
     machineCode.setImm(data)
+    # Check if register with immediate data
+    if imm > 2**register.size:
+        return "Immediate data is too large for register"
     # Transfer to reg
     register.input(imm)
     return
@@ -107,6 +112,7 @@ def moveRegImm(machineCode, reg, imm):
 
 # Opcode = 14
 def movMemImm(machineCode, mem, imm):
+    imm = int(imm)
     # Get Opcode
     machineCode.setOpcode('1111')
     # Set mode
@@ -500,7 +506,7 @@ def AND(mode, machineCode, rm1='', rm2='', binaryString=''):
 
         # set imm
         machineCode.setImm(binaryString)
-        
+
         # Take AND
         for x in range(8):
             valueMem[x] = valueMem[x] & int(binaryString[x])
@@ -520,7 +526,8 @@ def AND(mode, machineCode, rm1='', rm2='', binaryString=''):
         valueReg = register.getData()
         # Pad zeros
         if len(binaryString) < register.size:
-            binaryString = '0' * (register.size - len(binaryString)) + binaryString
+            binaryString = '0' * \
+                (register.size - len(binaryString)) + binaryString
         elif len(binaryString) > register.size:
             binaryString = binaryString[-register.size:]
         # set imm
@@ -649,7 +656,8 @@ def OR(mode, machineCode, rm1='', rm2='', binaryString=''):
         valueReg = register.getData()
         # Pad zeros
         if len(binaryString) < register.size:
-            binaryString = '0' * (register.size - len(binaryString)) + binaryString
+            binaryString = '0' * \
+                (register.size - len(binaryString)) + binaryString
         elif len(binaryString) > register.size:
             binaryString = binaryString[-register.size:]
         # set imm
@@ -778,7 +786,8 @@ def XOR(mode, machineCode, rm1='', rm2='', binaryString=''):
         valueReg = register.getData()
         # Pad zeros
         if len(binaryString) < register.size:
-            binaryString = '0' * (register.size - len(binaryString)) + binaryString
+            binaryString = '0' * \
+                (register.size - len(binaryString)) + binaryString
         elif len(binaryString) > register.size:
             binaryString = binaryString[-register.size:]
 

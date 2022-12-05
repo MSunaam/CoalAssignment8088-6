@@ -9,7 +9,11 @@ class MachineCode:
         self.imm = ''
 
     def print(self):
-        print(f"{self.opcode} {self.dBit}{self.wBit} {self.mod} {self.reg} {self.rm2} {self.imm}\n")
+        print(
+            f"{self.opcode} {self.dBit}{self.wBit} {self.mod} {self.reg} {self.rm2} {self.imm}\n")
+
+    def returnCode(self):
+        return f"{self.opcode} {self.dBit}{self.wBit} {self.mod} {self.reg} {self.rm2} {self.imm}\n"
 
     def clear(self):
         self.opcode = ''
