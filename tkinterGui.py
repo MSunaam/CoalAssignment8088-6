@@ -164,6 +164,7 @@ code.grid(row=1, column=3, padx=2, pady=2, sticky='W')
 
 def acceptCode():
 
+    machineCodes.clear()
     codeString = (code.get())
     errorMsg = stringToFunction(codeString, machineCodes)
     if errorMsg is not None:
@@ -176,6 +177,7 @@ def acceptCode():
                           rowspan=3, padx=2, pady=2)
         # Refresh Labels
         overWriteLabels()
+        code.delete(0,tk.END)
 
 
 acceptCode = tk.Button(window, text='Execute', command=acceptCode)

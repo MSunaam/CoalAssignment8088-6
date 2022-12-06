@@ -155,7 +155,7 @@ def inc(machineCode, rm, isMemory):
         # Get Register code
         machineCode.setReg(register.getCode())
         # Get value of register and convert to decimal
-        value = returnDecimal(register)
+        value = returnDecimal(register.getData())
         # Increment Decimal Value
         value = value + 1
         registerSize = register.size

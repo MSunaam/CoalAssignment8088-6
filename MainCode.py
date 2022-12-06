@@ -72,12 +72,12 @@ def stringToFunction(string, machineCode):
             if listOperands[1] in SubReg.keys() or listOperands[1] in Reg.keys():
                 # Second Operand must be Memory
                 moveRegMem(
-                    machineCode, listOperands[1], listOperands[2].upper())
+                    machineCode, listOperands[1], listOperands[2][1].upper())
             elif listOperands[2] in SubReg.keys() or listOperands[2] in Reg.keys():
                 # Check if second operand is register
                 # Then first operand is memory
                 moveMemReg(
-                    machineCode, listOperands[2].upper(), listOperands[1])
+                    machineCode, listOperands[2], listOperands[1][1].upper())
             else:
                 # Immediate Data
                 movMemImm(
@@ -88,7 +88,7 @@ def stringToFunction(string, machineCode):
             print("Error, Invalid Operands")
             errorMsg += 'Error, Invalid Operands'
             return errorMsg
-        if memory is not None:
+        if memory is None:
             # Increment Register
             inc(machineCode, listOperands[1], False)
         else:
@@ -100,12 +100,12 @@ def stringToFunction(string, machineCode):
             print("Error, Invalid Operands")
             errorMsg += "Error, Invalid Operands"
             return errorMsg
-        if memory is not None:
+        if memory is None:
             # Increment Register
             dec(machineCode, listOperands[1], False)
         else:
             # Increment Memory
-            dec(machineCode, listOperands[1].upper(), True)
+            dec(machineCode, listOperands[1][1].upper(), True)
     elif listOperands[0] == 'ror':
         # Check if memory or register
         if memory is None:
